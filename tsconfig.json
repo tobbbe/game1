@@ -1,0 +1,20 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+  	"strictNullChecks": false,
+  	"outDir": "dist/",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "module": "es6",
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "files": [
+  	"index.ts"
+  ],
+  "include": [
+      "/**/*"
+  ],
+}
