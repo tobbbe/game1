@@ -11,7 +11,7 @@ function init(canvas) {
     e.preventDefault()
 
     // TODO: move this to eventemitter
-    const distanceBetweenUnits = 2;
+    const distanceBetweenUnits = 3;
     let unitRowSize = selectedUnits.reduce((pre, x) => pre + x.getSize() + distanceBetweenUnits, 0);
     let dist = unitRowSize / selectedUnits.length;
     let nextXPos = e.clientX - (unitRowSize / 2);
