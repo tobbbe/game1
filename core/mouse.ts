@@ -5,7 +5,7 @@ import Selection from "./models/selection";
 const selection = new Selection(); //{ x: 0, y: 0, startX: 0, startY: 0, box: {} as any };
 let leftClickIsDown = false;
 
-function init(canvas, animations) {
+function init(canvas) {
 
   canvas.oncontextmenu = (e) => {
     e.preventDefault()
@@ -19,11 +19,6 @@ function init(canvas, animations) {
     selectedUnits.forEach(unit => {
       nextXPos += dist;
       unit.setFuturePosition(Math.floor(nextXPos), e.clientY)
-    })
-
-    animations.push({
-      stopAt: new Date().getTime() + 200,
-      shape: { x: e.clientX - 5, y: e.clientY - 5, w: 10, h: 10, color: 'red' }
     })
   };
 

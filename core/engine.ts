@@ -9,7 +9,6 @@ let delta = 0;
 
 export const units = [];
 export const selectedUnits = [];
-let animations = [];
 
 function gameLoop() {
   window.requestAnimationFrame(gameLoop);
@@ -28,14 +27,6 @@ function gameDraw() {
 
   mouse.drawSelection()
   units.forEach(u => u.draw())
-
-  animations
-    .forEach(s => {
-      config.mouseCtx.fillStyle = s.shape.color;
-      config.mouseCtx.fillRect(s.shape.x, s.shape.y, s.shape.w, s.shape.h)
-    })
-
-  animations = animations.filter(s => s.stopAt > currentTime)
 }
 
 
@@ -43,7 +34,7 @@ function gameDraw() {
 export const game = {
   start: () => {
     setup()
-    mouse.init(config.mouseCanvas, animations)
+    mouse.init(config.mouseCanvas)
     keyboard.init()
     gameLoop()
   },

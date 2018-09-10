@@ -3,7 +3,8 @@ import { randomNumber } from "./../core/utilities";
 import mouse from "./../core/mouse";
 
 export const unitFactory = {
-  create: () => {
+  create: (_type) => {
+    const type = types[_type];
     let size = 6;
     const speed = 4;
 
@@ -37,7 +38,7 @@ export const unitFactory = {
         this.move()
         const isInsideSelection = mouse.selection.x > 0 && this.isInsideMouseSelection();
         config.gameCtx.fillStyle = isInsideSelection ? 'blue' :
-          this.state.isSelected ? 'red' : 'white';
+          this.state.isSelected ? 'red' : type.color;
         config.gameCtx.fillRect(this.state.x, this.state.y, size, size)
       }
 
@@ -84,4 +85,19 @@ export const unitFactory = {
 
     return new Unit();
   }
+}
+
+const types = {
+  'tank': {
+    color: '#43a8e4'
+  },
+  'healer': {
+    color: '#43e46e'
+  },
+  'range': {
+    color: '#e4d143'
+  },
+  'melee': {
+    color: '#e24a4a'
+  },
 }

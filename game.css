@@ -16,3 +16,23 @@ html, body {
 #mouse-canvas {
   opacity: .4;
 }
+
+@keyframes backgroundpulse {
+ 0% {
+
+ }
+}
+
+@keyframes pulse {
+  /* animation: pulse 6s infinite;
+  will-change: background; */
+  0% {
+  	background: #444;
+  }
+  70% {
+  	background: #333;
+  }
+  100% {
+  	background: #444;
+  }
+}
