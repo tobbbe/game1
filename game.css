@@ -17,6 +17,21 @@ html, body {
   opacity: .4;
 }
 
+#mouse-click-element {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: absolute;
+  background: rgb(232, 255, 131);
+  display: none;
+  will-change: transform, opacity;
+}
+
+#mouse-click-element.show {
+  display: block;
+  animation: pulse 1s infinite;
+}
+
 @keyframes backgroundpulse {
  0% {
 
@@ -27,12 +42,15 @@ html, body {
   /* animation: pulse 6s infinite;
   will-change: background; */
   0% {
-  	background: #444;
+    opacity: .4;
+    transform: scale(.2);
   }
   70% {
-  	background: #333;
+    opacity: .2;
+    transform: scale(1.4);    
   }
   100% {
-  	background: #444;
+    opacity: .4;
+    transform: scale(.2);    
   }
 }

@@ -5,10 +5,21 @@ import Selection from "./models/selection";
 const selection = new Selection(); //{ x: 0, y: 0, startX: 0, startY: 0, box: {} as any };
 let leftClickIsDown = false;
 
+const mouseClickAnimationEl = document.createElement("div");
+mouseClickAnimationEl.id = 'mouse-click-element';
+document.body.appendChild(mouseClickAnimationEl);
+
 function init(canvas) {
 
   canvas.oncontextmenu = (e) => {
     e.preventDefault()
+
+    mouseClickAnimationEl.style.left = e.clientX - 10 + 'px';
+    mouseClickAnimationEl.style.top = e.clientY - 10 + 'px';
+    mouseClickAnimationEl.classList.add('show')
+    setTimeout(() => {
+      mouseClickAnimationEl.classList.remove('show')
+    }, 2000);
 
     // TODO: move this to eventemitter
     const distanceBetweenUnits = 3;
