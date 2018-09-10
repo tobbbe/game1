@@ -1,18 +1,16 @@
 import config from "./../core/config";
-import { randomNumber } from "./../core/utils";
+import { randomNumber } from "./../core/utilities";
 import mouse from "./../core/mouse";
 
 export const unitFactory = {
   create: () => {
     let size = 6;
-    let isSelected = false;
     const speed = 3;
-
-
 
     class Unit {
 
       state = {
+        isSelected: false,
         futureX: null,
         futureY: null,
         velX: null,
@@ -21,7 +19,9 @@ export const unitFactory = {
         y: randomNumber(0 + size * 3, config.canvasHeight - size * 3)
       }
 
-      calcSpeed(axle) {
+      calcNewPos(axle) {
+        if (!this.state['future' + axle]) return;
+
         let remainingDistance = this.state['future' + axle] - this.state[axle.toLowerCase()];
         remainingDistance = remainingDistance < 0 ? -remainingDistance : remainingDistance;
         if (remainingDistance < Math.abs(this.state['vel' + axle]) + 1) {
@@ -35,34 +35,20 @@ export const unitFactory = {
 
       draw() {
         this.move()
-        const isInsideSelection = this.isInsideMouseSelection();
+        const isInsideSelection = mouse.selection.x > 0 && this.isInsideMouseSelection();
         config.gameCtx.fillStyle = isInsideSelection ? 'blue' :
-          isSelected ? 'red' : 'white';
+          this.state.isSelected ? 'red' : 'white';
         config.gameCtx.fillRect(this.state.x, this.state.y, size, size)
       }
 
       move() {
-        if (!this.state.futureX && !this.state.futureY) return;
-
-        if (this.state.futureX) {
-          this.calcSpeed('X'); //this.state.futureX > x ? this.calcSpeed(this.state.futureX, x) : -this.calcSpeed(this.state.futureX, x);
-        }
-        else {
-          this.state.futureX = null;
-        }
-
-        if (this.state.futureY) {
-          this.calcSpeed('Y'); // this.state.futureY > y ? this.calcSpeed(this.state.futureY, y) : -this.calcSpeed(this.state.futureY, y);
-        }
-        else {
-          this.state.futureY = null;
-        }
+        this.calcNewPos('X')
+        this.calcNewPos('Y')
       }
 
       setFuturePosition(newFutureX, newFutureY) {
-        this.state.futureX = newFutureX - (size / 2);
+        this.state.futureX = newFutureX - (size);
         this.state.futureY = newFutureY - (size / 2);
-        console.log(this.state)
         var tx = this.state.futureX - this.state.x,
           ty = this.state.futureY - this.state.y,
           dist = Math.sqrt(tx * tx + ty * ty);
@@ -71,18 +57,24 @@ export const unitFactory = {
       }
 
       isInsideMouseSelection() {
-        return this.state.x > mouse.selection.startX && this.state.x < mouse.selection.x && this.state.y > mouse.selection.startY && this.state.y < mouse.selection.y;
+        if (
+          this.state.x > mouse.selection.startX
+          && this.state.x < mouse.selection.x
+          && this.state.y > mouse.selection.startY
+          && this.state.y < mouse.selection.y
+        )
+          return true;
       }
 
       isInsideMouseClick() {
-        return this.state.x - size <= mouse.selection.startX
-          && this.state.x + (size * 2) >= mouse.selection.x
-          && this.state.y - size <= mouse.selection.startY
-          && this.state.y + (2 * size) >= mouse.selection.y;
+        return this.state.x <= mouse.selection.startX
+          && this.state.x + size >= mouse.selection.x
+          && this.state.y <= mouse.selection.startY
+          && this.state.y + size >= mouse.selection.y;
       }
 
       selected(val) {
-        isSelected = val;
+        this.state.isSelected = val;
       }
 
       getSize() {

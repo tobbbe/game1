@@ -1,7 +1,57 @@
 import { units, selectedUnits } from "./engine";
 import config from "./config";
 
-const selection = { x: 0, y: 0, startX: 0, startY: 0 };
+class Selection {
+
+  private _startX = 0
+  private _startY = 0
+  private _x = 0
+  private _y = 0
+
+  set startX(val) {
+    this._startX = val;
+  }
+  get startX() {
+    return Math.min(this._startX, this._x);
+  }
+
+  set startY(val) {
+    this._startY = val;
+  }
+  get startY() {
+    return Math.min(this._startY, this._y);
+  }
+
+  set x(val) {
+    this._x = val;
+  }
+  get x() {
+    return Math.max(this._startX, this._x);
+  }
+
+  set y(val) {
+    this._y = val;
+  }
+  get y() {
+    return Math.max(this._startY, this._y);
+  }
+
+  set(pos) {
+    this.startX = pos.startX;
+    this.x = pos.x || pos.startX;
+    this.startY = pos.startY;
+    this.y = pos.y || pos.startY;
+  }
+
+  reset() {
+    this.x = 0;
+    this.y = 0;
+    this.startX = 0;
+    this.startY = 0;
+  }
+}
+
+const selection = new Selection(); //{ x: 0, y: 0, startX: 0, startY: 0, box: {} as any };
 let leftClickIsDown = false;
 
 function init(canvas, animations) {
@@ -26,13 +76,6 @@ function init(canvas, animations) {
     })
   };
 
-  canvas.onpointermove = (e) => {
-    if (!leftClickIsDown) return;
-
-    selection.x = e.clientX;
-    selection.y = e.clientY;
-  }
-
   canvas.onpointerdown = (e) => {
     canvas.setPointerCapture(e.pointerId);
 
@@ -44,8 +87,12 @@ function init(canvas, animations) {
     }
 
     leftClickIsDown = true;
-    selection.startX = e.clientX;
-    selection.startY = e.clientY;
+    selection.set({ startX: e.clientX, startY: e.clientY })
+  }
+
+  canvas.onpointermove = (e) => {
+    if (!leftClickIsDown) return;
+
     selection.x = e.clientX;
     selection.y = e.clientY;
   }
@@ -62,10 +109,7 @@ function init(canvas, animations) {
       }
     })
 
-    selection.x = 0;
-    selection.y = 0;
-    selection.startX = 0;
-    selection.startY = 0;
+    selection.reset()
     leftClickIsDown = false;
   }
 
@@ -80,7 +124,8 @@ function drawSelection() {
 }
 
 export default {
-  selection,
+  selection: selection,
   init,
   drawSelection
 }
+
