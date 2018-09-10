@@ -5,7 +5,7 @@ import mouse from "./../core/mouse";
 export const unitFactory = {
   create: () => {
     let size = 6;
-    const speed = 3;
+    const speed = 4;
 
     class Unit {
 

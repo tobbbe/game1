@@ -1,4 +1,5 @@
 import mouse from "./mouse";
+import keyboard from "./keyboard";
 import { setup } from "./setup";
 import config from "./config";
 
@@ -37,11 +38,13 @@ function gameDraw() {
   animations = animations.filter(s => s.stopAt > currentTime)
 }
 
-mouse.init(config.mouseCanvas, animations)
+
 
 export const game = {
   start: () => {
     setup()
+    mouse.init(config.mouseCanvas, animations)
+    keyboard.init()
     gameLoop()
   },
   addUnit: (unit) => units.push(unit)

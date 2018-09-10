@@ -1,55 +1,6 @@
 import { units, selectedUnits } from "./engine";
 import config from "./config";
-
-class Selection {
-
-  private _startX = 0
-  private _startY = 0
-  private _x = 0
-  private _y = 0
-
-  set startX(val) {
-    this._startX = val;
-  }
-  get startX() {
-    return Math.min(this._startX, this._x);
-  }
-
-  set startY(val) {
-    this._startY = val;
-  }
-  get startY() {
-    return Math.min(this._startY, this._y);
-  }
-
-  set x(val) {
-    this._x = val;
-  }
-  get x() {
-    return Math.max(this._startX, this._x);
-  }
-
-  set y(val) {
-    this._y = val;
-  }
-  get y() {
-    return Math.max(this._startY, this._y);
-  }
-
-  set(pos) {
-    this.startX = pos.startX;
-    this.x = pos.x || pos.startX;
-    this.startY = pos.startY;
-    this.y = pos.y || pos.startY;
-  }
-
-  reset() {
-    this.x = 0;
-    this.y = 0;
-    this.startX = 0;
-    this.startY = 0;
-  }
-}
+import Selection from "./models/selection";
 
 const selection = new Selection(); //{ x: 0, y: 0, startX: 0, startY: 0, box: {} as any };
 let leftClickIsDown = false;
@@ -82,7 +33,7 @@ function init(canvas, animations) {
     if (e.button === 2) return;
     // TODO: do this with eventemitter instead
     if (!e.ctrlKey) {
-      selectedUnits.length = 0;
+      selectedUnits.length = 0; // TODO: potential memory leak?
       units.forEach(unit => unit.selected(false))
     }
 
@@ -103,7 +54,7 @@ function init(canvas, animations) {
     // TODO: do this with eventemitter instead
     const wasClick = Math.floor(selection.x) === Math.floor(selection.startX) && Math.floor(selection.y) === Math.floor(selection.startY);
     units.forEach(unit => {
-      if ((wasClick && unit.isInsideMouseClick()) || unit.isInsideMouseSelection()) {
+      if ((wasClick && unit.isInsideMouseClick()) || (!wasClick && unit.isInsideMouseSelection())) {
         unit.selected(true)
         selectedUnits.push(unit)
       }
