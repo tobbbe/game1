@@ -29,18 +29,10 @@ html, body {
 
 #mouse-click-element.show {
   display: block;
-  animation: pulse 1s infinite;
+  animation: mouse-click-pulse 1s infinite;
 }
 
-@keyframes backgroundpulse {
- 0% {
-
- }
-}
-
-@keyframes pulse {
-  /* animation: pulse 6s infinite;
-  will-change: background; */
+@keyframes mouse-click-pulse {
   0% {
     opacity: .4;
     transform: scale(.2);
